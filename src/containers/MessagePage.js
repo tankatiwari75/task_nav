@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 
 import SideBar from "../components/SideBar";
 import Chat from "../components/Chat";
@@ -6,6 +6,7 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 
 export default function MessagePage() {
+
   return (
     <>
       <NavBar />
