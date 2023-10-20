@@ -1,9 +1,10 @@
-import react, { useState } from "react";
+import react, { useState ,useEffect} from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import profile from "../static/images/profile.png";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+import { useForm } from "react-hook-form";
 
 const user = {
   name: "Tanka",
@@ -26,17 +27,53 @@ function classNames(...classes) {
 
 export default function DashBoard() {
   const [showPopup, setShowPopup] = useState(false);
+  const [taskList, setTaskList] = useState([])
+  const { register, handleSubmit, errors } = useForm();
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetch("http://localhost:3001/api/tasks/list");
+      const json = await data.json();
+      setTaskList(json);
+    };
+
+    fetchData().catch(console.error);
+    
+  }, [])
+  
   const togglePopup = () => {
     setShowPopup(!showPopup);
   };
 
   const paragraphs = [
-    'This is the first Task.',
-    'This is the second Task.',
-    'This is the third Task.',
-    'And this is the fourth Fourth.',
+    "This is the first Task.",
+    "This is the second Task.",
+    "This is the third Task.",
+    "And this is the fourth Fourth.",
   ];
+  const createTask = async(data) => {
+
+    try{
+      const response = await fetch("http://localhost:3001/api/tasks", {
+        method: 'POST',
+        crossDomain:true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        setTaskList(data)
+        togglePopup()
+      } else {
+        console.error('Login failed');
+      }
+    }catch(error) {
+        console.error('An error occurred', error);
+      }
+  };
   return (
     <>
       <NavBar />
@@ -53,25 +90,27 @@ export default function DashBoard() {
         {showPopup && (
           <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-75 z-50">
             <div className="bg-white w-1/3 rounded shadow-lg">
-            <button
+              <button
                 className="flex float-right  p-3 text-gray-600 hover:text-gray-800"
                 onClick={togglePopup}
               >
                 Close
               </button>
               <h2 className="text-xl font-semibold mb-4 p-3">Create Task</h2>
-              
-              <form className="m-5">
+
+              <form className="m-5" onSubmit={handleSubmit(createTask)}>
                 <div className="mb-4">
                   <label
                     htmlFor="name"
                     className="block text-lg font-medium text-gray-700"
                   >
-                    Task Question
+                    Task
                   </label>
                   <input
                     type="text"
                     id="name"
+                    name="task_decription"
+                    {...register('task_description', { required: true })}
                     className="w-full px-3 py-2 border rounded-md"
                   />
                 </div>
@@ -82,12 +121,17 @@ export default function DashBoard() {
                   >
                     Asssigned To:
                   </label>
-                  <select id="select" class="custom-select">
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                    <option value="option4">Option 4</option>
-                    <option value="option5">Option 5</option>
+                  <select
+                    id="select"
+                    class="custom-select"
+                    name="team_member"
+                    {...register('team_member', { required: true })}
+                  >
+                    <option value="Jasmina">Jasmina</option>
+                    <option value="Pratima">Pratima</option>
+                    <option value="Tanka">Tanka</option>
+                    <option value="Ananda">Ananda</option>
+                    <option value="Subash">Subash</option>
                   </select>
                 </div>
                 <div className="mb-4">
@@ -100,6 +144,8 @@ export default function DashBoard() {
                   <input
                     type="date"
                     id="duedat"
+                    name="due_date"
+                    {...register('due_date', { required: true })}
                     className="w-full px-3 py-2 border rounded-md"
                   />
                 </div>
@@ -114,31 +160,29 @@ export default function DashBoard() {
                     Submit
                   </button>
                 </div>
-                
               </form>
-              
             </div>
           </div>
         )}
       </header>
       <main>
-      <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">My Tasks</h1>
-      <hr className="border-t-2 border-gray-300 my-4" />
-      {paragraphs.map((paragraph, index) => (
-        <div key={index}>
-          <p className="mb-2">{paragraph}</p>
-          <p className="mb-2 ">Team Members:Tanka, Jasmina, Pratima </p>
-          <p className="mb-2">Due Date: 2022-08-10</p>
-          {index !== paragraphs.length - 1 && <hr className="border-t-2 border-gray-300 my-4" />}
+        <div className="container mx-auto p-4">
+          <h1 className="text-2xl font-bold mb-4">My Tasks</h1>
+          <hr className="border-t-2 border-gray-300 my-4" />
+          {taskList.map((item,index) => (
+            <div key={item.id}>
+              <p className="mb-2">Task Description: {item.task_description}</p>
+              <p className="mb-2 ">Team Member: {item.team_member} </p>
+              <p className="mb-2">Due Date: {item.due_date}</p>
+              {index !== taskList.length - 1 && (
+                <hr className="border-t-2 border-gray-300 my-4" />
+              )}
+            </div>
+          ))}
         </div>
-      )
-      )
-      }
-    </div>
       </main>
 
-      <Footer/>
+      <Footer />
     </>
   );
 }
