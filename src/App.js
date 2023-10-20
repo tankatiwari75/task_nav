@@ -6,7 +6,8 @@ import MessagePage from './containers/MessagePage';
 function App() {
   return (
 
-    <DashBoard/>
+    
+    <MessagePage/>
   );
 }
 
