@@ -33,7 +33,7 @@ export default function NavBAr() {
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                    <h1 className="text-3xl font-extrabold text-red-400">Task-Nav</h1>
+                    <h1 className="text-3xl font-extrabold text-red-400">EqualTasks</h1>
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
