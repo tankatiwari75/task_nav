@@ -12,7 +12,7 @@
 /coverage
 
 # production
-/build
+
 ./package-
 # misc
 .DS_Store
