@@ -40,13 +40,13 @@ export const Chat = () => {
   };
   return (
     <>
-    {messageList.map((item)=>
-      <>
+    
       <header className="flex bg-violet-600 h-16 ">
-        <span className="text-zinc-50 mt-4 font-bold text-lg ">{item.user}</span>
+        <span className="text-zinc-50 mt-4 font-bold text-lg ">Jasmina</span>
       </header>
+      {messageList.map((item)=>
       <div> {item.message}</div>
-      </>
+      
     )}
   
       <div className="absolute bg-gray-200 bottom-0 w-full p-8 shadow-lg">

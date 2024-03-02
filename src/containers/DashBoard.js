@@ -5,6 +5,7 @@ import profile from "../static/images/profile.png";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { useForm } from "react-hook-form";
+import MessagePage from "./MessagePage";
 
 const user = {
   name: "Tanka",
@@ -170,13 +171,18 @@ export default function DashBoard() {
           <h1 className="text-2xl font-bold mb-4">My Tasks</h1>
           <hr className="border-t-2 border-gray-300 my-4" />
           {taskList.map((item,index) => (
+            
             <div key={item.id}>
+              <a href={<MessagePage/>}>
               <p className="mb-2">Task Description: {item.task_description}</p>
               <p className="mb-2 ">Team Member: {item.team_member} </p>
               <p className="mb-2">Due Date: {item.due_date}</p>
               {index !== taskList.length - 1 && (
                 <hr className="border-t-2 border-gray-300 my-4" />
               )}
+            
+              </a>
+             
             </div>
           ))}
         </div>
