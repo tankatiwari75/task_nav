@@ -1,16 +1,13 @@
-import React,{useEffect,useState} from "react";
-
 import SideBar from "../components/SideBar";
 import Chat from "../components/Chat";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 
 export default function MessagePage() {
-
   return (
     <>
       <NavBar />
-      <div className="grid grid-cols-4 gap-2" style={{height:'75vh'}}>
+      <div className="grid grid-cols-4 gap-2" style={{ height: "75vh" }}>
         <div className="bg-violet-600 m-4 mr-2 rounded-xl overflow-hidden">
           <SideBar />
         </div>
