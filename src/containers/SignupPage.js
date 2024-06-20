@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-
-
-
+import { useNavigate } from "react-router-dom";
 
 export default function SignupPage() {
   const options = [
@@ -60,7 +57,7 @@ export default function SignupPage() {
     <div className="bg-teal-200 min-h-screen flex items-center justify-center">
       <div className="max-w-md w-full p-8 bg-white rounded-lg shadow-lg">
         <h1 className="text-3xl font-semibold text-gray-800 text-center mb-8">
-          EqualTasks
+          Task_Nav
         </h1>
         <form className="space-y-6">
           <div>

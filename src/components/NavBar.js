@@ -34,7 +34,7 @@ export default function NavBAr() {
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
                       <h1 className="text-3xl font-extrabold text-red-400">
-                        EqualTasks
+                        Task_Nav
                       </h1>
                     </div>
                     <div className="hidden md:block">

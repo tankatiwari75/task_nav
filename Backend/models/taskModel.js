@@ -9,6 +9,10 @@ const dataSchema = new mongoose.Schema({
     required: true,
     type: Date,
   },
+  is_completed: {
+    default: false,
+    type: Boolean,
+  },
 });
 
 module.exports = mongoose.model("Tasks", dataSchema);

@@ -5,6 +5,8 @@ import Footer from "../components/Footer";
 import { useForm } from "react-hook-form";
 import MessagePage from "./MessagePage";
 
+import { List } from "lucide-react";
+
 // const user = {
 //   name: "Tanka",
 //   email: "tom@example.com",
@@ -27,17 +29,27 @@ import MessagePage from "./MessagePage";
 export default function DashBoard() {
   const [showPopup, setShowPopup] = useState(false);
   const [taskList, setTaskList] = useState([]);
+
+  const [filterOption, setFilterOption] = useState("all"); // Default filter option
   const { register, handleSubmit } = useForm();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetch("http://localhost:3001/api/tasks/list");
-      const json = await data.json();
-      setTaskList(json);
-    };
-
-    fetchData().catch(console.error);
+    fetchData(); // Initial fetch of tasks
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/tasks/list");
+      if (response.ok) {
+        const data = await response.json();
+        setTaskList(data);
+      } else {
+        console.error("Failed to fetch tasks");
+      }
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
+  };
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
@@ -71,6 +83,55 @@ export default function DashBoard() {
       console.error("An error occurred", error);
     }
   };
+
+  // mark as Complete Option
+  const markAsComplete = async (taskId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/tasks/${taskId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ is_completed: true }),
+        }
+      );
+
+      if (response.ok) {
+        const updatedTask = await response.json();
+        setTaskList(
+          taskList.map((task) => (task._id === taskId ? updatedTask : task))
+        );
+      } else {
+        console.error("Failed to mark task as complete");
+      }
+    } catch (error) {
+      console.error("An error occurred", error);
+    }
+  };
+  // Delete Options
+  const deleteTask = async (taskId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/tasks/${taskId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (response.ok) {
+        setTaskList(taskList.filter((task) => task._id !== taskId));
+      } else {
+        console.error("Failed to delete task");
+      }
+    } catch (error) {
+      console.error("An error occurred", error);
+    }
+  };
+
+  const today = new Date().toISOString().split("T")[0];
+
   return (
     <>
       <NavBar />
@@ -123,6 +184,7 @@ export default function DashBoard() {
                   <input
                     type="date"
                     id="duedat"
+                    min={today}
                     name="due_date"
                     {...register("due_date", { required: true })}
                     className="w-full px-3 py-2 border rounded-md"
@@ -146,20 +208,56 @@ export default function DashBoard() {
       </header>
       <main>
         <div className="container mx-auto p-4">
-          <h1 className="text-2xl font-bold mb-4">My Tasks</h1>
+          <div className="flex">
+            <h1 className="text-2xl font-bold mb-4">My Tasks</h1>
+            {/* <div className="ml-auto">
+              <select
+                value={filterOption}
+                onChange={(e) => filterTasks(e.target.value)}
+              >
+                <option value="all">All Tasks</option>
+                <option value="due_date">Closer to Due Date</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div> */}
+          </div>
+
           <hr className="border-t-2 border-gray-300 my-4" />
           {taskList.map((item, index) => (
-            <div key={item.id}>
-              <a href={<MessagePage />}>
-                <p className="mb-2">
-                  Task Description: {item.task_description}
-                </p>
-                <p className="mb-2 ">Team Member: {item.team_member} </p>
-                <p className="mb-2">Due Date: {item.due_date}</p>
-                {index !== taskList.length - 1 && (
-                  <hr className="border-t-2 border-gray-300 my-4" />
-                )}
-              </a>
+            <div key={item._id}>
+              <div className="flex">
+                <div>
+                  <p className="mb-2">
+                    Task Description: {item.task_description}
+                  </p>
+                  <p className="mb-2">Due Date: {item.due_date}</p>
+                </div>
+                <div className="ml-auto">
+                  {!item.is_completed ? (
+                    <button
+                      className="bg-emerald-600 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
+                      onClick={() => markAsComplete(item._id)}
+                    >
+                      Mark As Complete
+                    </button>
+                  ) : (
+                    <div className="flex">
+                      <span className="text-green-500 font-bold mr-2">
+                        Completed
+                      </span>
+                      <button
+                        className="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded"
+                        onClick={() => deleteTask(item._id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+              {index !== taskList.length - 1 && (
+                <hr className="border-t-2 border-gray-300 my-4" />
+              )}
             </div>
           ))}
         </div>

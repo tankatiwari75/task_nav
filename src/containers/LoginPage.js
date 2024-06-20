@@ -38,7 +38,7 @@ export default function LoginPage() {
         <div className="flex  mx-auto flex-1 flex-col p-10 justify-center bg-white rounded-xl lg:w-[40rem] lg:h-[32rem] ">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm ">
             <h1 className="text-5xl text-center font-extrabold text-red-400">
-              EqualTasks
+              Task_Nav
             </h1>
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
               Sign in to your account
