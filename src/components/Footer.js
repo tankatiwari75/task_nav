@@ -29,7 +29,7 @@ const Footer = () => {
             <h1 className="text-2xl font-bold mb-2">Contact Us</h1>
             <p>74 Bloor St.</p>
             <p>Toronto, Ontario</p>
-            <p>Email: Task_nav@task.ca</p>
+            <p>Email: equal-tasks@task.ca</p>
             <p>Phone: (123) 456-7890</p>
           </div>
         </div>
@@ -38,7 +38,7 @@ const Footer = () => {
       {/* Copyright Section */}
       <div className="bg-gray-900 text-center py-2">
         <div className="container mx-auto">
-          <p>&copy; {new Date().getFullYear()} Task_Nav. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} EqualTasks. All rights reserved.</p>
         </div>
       </div>
     </footer>
